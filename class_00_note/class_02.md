@@ -150,7 +150,43 @@ for v2 in lst2:
     print(lst1.count(v2),end=" ")
 ```
 list 자료구조는 탐색에서 O(n)의 시간복잡도를 가진다. 따라서 더 빠른 알고리즘을 사용하는 것이 좋다. \
-하지만 이 경우는 `set`을 사용할 수 없다. `list`를 `set`으로 변환하면 `중복되는 원소들이 자동으로 제거`된다.
+하지만 이 경우는 `set`을 사용할 수 없다. `list`를 `set`으로 변환하면 `중복되는 원소들이 자동으로 제거`된다. \
+그래서 딕셔너리를 만들고, 해당 원소와 그것의 개수를 각각 key와 value로 갖는 변수를 만들어서 해결했다. \
+list만을 이용해서 구현한 코드가 물론 좀더 짧지만, 이 코드는 input으로 들어오는 원소의 개수가 매우 많은 경우 탐색시간이 그만큼 늘어나게 된다. 한번 딕셔너리에 넣어준 후에 탐색하면 매번 탐색시간이 O(1)로 고정된다. 그래서 전체 탐색시간은 오히려 줄어들게 된다. 
 
+## input() vs sys.stdin.readline()
+백준 시간초과 항목 중에 위에 두가지 중에서 후자를 사용해야 입력에서 받는 속도가 빨라진다고 한다. 더 자세히 말하자면,
+* 입력 속도가 더 빠름
+* 메모리를 더 적게 씀
+의 두가지 장점이 sys.stdin.readline()에 존재한다. 다만, 반복문을 통해서 많은 input을 받아야 하는 경우는 이것이 유의미한 차이를 내겠지만, 그저 몇줄 input을 받는 경우에 input()함수를 사용한다고 해서 입력 시간초과가 나지는 않는다.
 
+## 시간복잡도와 자료구조
+자료구조의 탐색시간에 대한 포스팅은 [여기](https://chancoding.tistory.com/43)를 참고하자.
+
+## stack
+stack은 마지막에 들어간 원소가 가장 먼저 나오는 구조이다. list에 pop, top 등의 stack용 원소가 이미 존재하기 때문에, stack을 구현할 때는 별다른 라이브러리 호출 없이 빈 list를 만들어서 구현하면 된다. \
+한가지 팁이 있다면, list에 append하는 경우 원소가 가장 오른쪽(마지막 원소 다음)에 추가된다고 볼 수 있을 것이다. 따라서 pop을 할 떄는 lst[-1], 즉 마지막 원소가 다시 나온다고 생각해야 한다. 쉽게 말하면(상상하기에) list를 시계반대방향으로 90도 기울이면 stack이 된다. \
+`10828.py`에 구현한 stack
+```
+def push(stack,X):
+    stack.append(X)
+    return stack
+
+def pop(stack):
+    if empty(stack):return -1
+    return stack.pop()
+
+def size(stack):
+    return len(stack)
+    
+def empty(stack):
+    if len(stack)==0:return 1
+    else: return 0
+
+def top(stack):
+    if empty(stack):return -1
+    else: return stack[-1]
+
+stack = []
+```
 
