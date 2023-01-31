@@ -106,7 +106,7 @@ lst_sorted = sorted(lst,reverse=True) # ["cde","bcd","abc"]
 ```
 
 ## 최소 힙
-참고한 포스팅은 [여기](https://reakwon.tistory.com/42). \ 
+참고한 포스팅은 [여기](https://reakwon.tistory.com/42). 문제 번호는 1927번. \ 
 자료구조 중에는 `최소 힙`, `최대 힙`이 있다. 이들 `힙`은 어떠한 배열에서 최솟값과 최댓값을 꺼내기 쉬운 구조이다.  \
 아래와 같은 list가 있다고 해보자.
 ```py
@@ -157,6 +157,7 @@ for i in range(5):
 	print(heapq.heappop(heap))
 ```
 ### 최대힙
+python에서는 따로 최대 힙을 지원하지는 않는다. 대신 push 및 pop 할 때, 부호 `-`를 붙여줘서 사용하면된다.
 ```py
 import heapq
 
