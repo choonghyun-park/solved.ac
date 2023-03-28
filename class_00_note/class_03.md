@@ -207,3 +207,99 @@ print(time)
 ```
 튜플이 원소로 들어있는 리스트에 위와 정렬하는 용도로 사용할 수 있다. 참고로, sorted 함수를 사용하는 두줄은 서로 독립적으로 같은 결과를 내준다.
 
+## 우선순위 큐 (Priority Queue)
+우선순위 큐는 데이서를 삽입하는 순서에 상관없이, 최솟값을 빠르게 얻을 수 있는 자료구조형이다. 
+### 매소드
+* 우선순위 큐 정의
+python 기본 라이브러리인 queue에서 사용할 수 있다.
+```py
+from queue import PriorityQueue
+
+Q = PriorityQueue()
+```
+* 원소 추가
+put() 함수를 사용하며, 딕셔너리처럼 사용하되, 우선순위 순서대로 사용하고 싶을 떄는 튜플을 이용한다.
+```py
+Q.put(2)
+Q.put((3,"Banana"))
+```
+* 원소 뽑기/삭제(pop or delete)
+```py
+Q.get()     # 최소 원소를 자료구조에서 빼서 반환. 이 경우 2를 반환
+Q.get()[1]  # 뽑은 튜플의 index 1번 원소를 반환. 이 경우 "Banana" 
+```
+* 최대값부터 뽑는 법
+우선순위 큐는 최솟값부터 차례로 뽑는 자료구조형이지만, 튜플을 사용하여 최댓값부터 뽑게 할 수 있다. 튜플의 0번 원소를 기준으로 최솟값부터 정렬되기 때문이다. 보다싶이, 원리는 앞의 Banana를 뽑은 경우와 같다.
+```py
+Q = PriorityQueue()
+Q.put((-2,2))
+Q.put((-1,-1))
+Q.put((-3,3))
+
+Q.get()[1]      #3     
+Q.get()[1]      #2
+Q.get()[1]      #1
+```
+### 이중 우선순위 큐
+백준 7662번 문제에 이중 우선순위 큐를 구현하는 문제가 나왔다. 가장 간단하게 짜려면 list와 sort를 이용하여 풀 수도 있지만, 이 경우 시간복잡도가 O(n)이 되어서 시간초과가 나온다. 이 코드를 참고하고자 하면, `7662_list.py`를 참고하면 된다. \
+* 이중 우선순위 큐 구현
+우선순위 큐는 바구니 안에 들어있는 원소에서 최솟값만 뽑아내는 형태에 비유할 수 있다. 이중 우선순위 큐는 최대와 최소를 뽑아내도록 만들면 되는데, 원소의 개수를 관리하기 위한 딕셔너리를 만들어서, 원소를 사용할 때마다 개수를 차감했다. 이중 우선순위 큐는 최대, 최소만 뽑으면 되기 때문에, 원소가 들어온 순서는 중요하지 않다. 하지만, **최솟값을 뽑는 상황에서 이미 빼버린 원소를 최댓값을 뽑을 때 다시 뽑는 경우**는 방지해야 한다.
+```py
+MAX = 1
+MIN = -1
+MAX_Q = PriorityQueue()
+MIN_Q = PriorityQueue()
+NUMS = {}
+LEN_Q = 0
+
+def insert(n):
+    global MAX,MIN,MAX_Q,MIN_Q,NUMS,LEN_Q
+    if n in NUMS:
+        NUMS[n]+=1
+    else:
+        NUMS[n]=1
+    MAX_Q.put((-n,n))
+    MIN_Q.put((n,n))
+    LEN_Q += 1
+
+def pop(sign):
+    global MAX,MIN,MAX_Q,MIN_Q,NUMS,LEN_Q
+    while(1):
+        # 빈 Q일 경우 함수를 반환
+        if empty():return
+        
+        if sign==MAX:
+            n = MAX_Q.get()[1]
+        elif sign==MIN:
+            n = MIN_Q.get()[1]
+        
+        if n in NUMS and NUMS[n]>0:
+            NUMS[n]-=1
+            LEN_Q -= 1
+            return n
+
+def empty():
+    if LEN_Q==0:return True
+    else: return False
+
+def clear():
+    global MAX,MIN,MAX_Q,MIN_Q,NUMS,LEN_Q
+    MAX_Q = PriorityQueue()
+    MIN_Q = PriorityQueue()
+    NUMS = {}
+    LEN_Q = 0
+``` 
+* 사용법
+```py
+MAX = 1
+MAX = -1
+
+insert(3)
+insert(4)
+insert(-1)
+insert(2)
+
+pop(MAX) # 4
+pop(MAX) # 3
+pop(MIN) # -1  
+```
